@@ -16,8 +16,8 @@ jobs:
   
     - name: Build
       run: |
-        cmake -B build64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DMSVC_STATIC=on -DBOOST_INTERFACE=off -DPYTHON_BINDINGS=off -DZ3_INCLUDE_DIRS="3rdparty/libz3/include" -DZ3_LIBRARIES="3rdparty/libz3/X64/libz3.lib" -DCAPSTONE_INCLUDE_DIRS="3rdparty/capstone/include" -DCAPSTONE_LIBRARIES="3rdparty/capstone/X64/capstone.lib" -DBUILD_SHARED_LIBS=off
-        cmake --build build64 --config ${{ env.BUILD_TYPE }} --parallel
+        cmake -B build64 -DCMAKE_BUILD_TYPE=Release -DMSVC_STATIC=on -DBOOST_INTERFACE=off -DPYTHON_BINDINGS=off -DZ3_INCLUDE_DIRS="3rdparty/libz3/include" -DZ3_LIBRARIES="3rdparty/libz3/X64/libz3.lib" -DCAPSTONE_INCLUDE_DIRS="3rdparty/capstone/include" -DCAPSTONE_LIBRARIES="3rdparty/capstone/X64/capstone.lib" -DBUILD_SHARED_LIBS=off
+        cmake --build build64 --config Release --parallel
         
     - name: Copy SDK
       run: |
