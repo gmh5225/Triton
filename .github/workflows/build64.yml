@@ -1,0 +1,38 @@
+name: CMake-64
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-2019
+    env:
+      BUILD_TYPE: Release
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      with:
+        repository: gmh5225/Triton
+        ref: win_static_build
+  
+    - name: Build
+      run: |
+        cmake -B build64 -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DMSVC_STATIC=on -DBOOST_INTERFACE=off -DPYTHON_BINDINGS=off -DZ3_INCLUDE_DIRS="3rdparty/libz3/include" -DZ3_LIBRARIES="3rdparty/libz3/X64/libz3.lib" -DCAPSTONE_INCLUDE_DIRS="3rdparty/capstone/include" -DCAPSTONE_LIBRARIES="3rdparty/capstone/X64/capstone.lib" -DBUILD_SHARED_LIBS=off
+        cmake --build build64 --config ${{ env.BUILD_TYPE }} --parallel
+        
+    - name: Copy SDK
+      run: |
+        mkdir build64\include\triton
+        copy src\libtriton\includes\triton\*.* build64\include\triton
+        copy build64\src\libtriton\includes\triton\*.* build64\include\triton
+        mkdir build64\lib
+        copy build64\src\libtriton\Release\*.* build64\lib
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@main
+      with:
+        name: libtriton-64
+        path: |
+          build64/include/*
+          build64/lib/*
+
+        
